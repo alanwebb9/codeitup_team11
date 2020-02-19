@@ -27,3 +27,14 @@ class WMData(models.Model):
 
     def __str__(self):
         return f'{self.pk}'
+
+class Game_WMill_Asset(models.Model):
+    county_id = models.IntegerField()
+    county_name = models.CharField(max_length=50, default='')
+    WMill_Height = models.IntegerField()
+    WMill_Speed = models.CharField(max_length=50, default='')
+    WMill_Power = models.IntegerField()
+    WMill_Coins = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.county_id}'

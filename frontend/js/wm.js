@@ -1,4 +1,8 @@
 var map;
+var overlay;
+var xoff = 0;
+var yoff = 0;
+
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 53.454072, lng: -7.825874 },
@@ -12,6 +16,9 @@ function initMap() {
       map.panTo({ lat: 53.454072, lng: -7.825874 });
     }, 500);
   });
+  overlay = new google.maps.OverlayView();
+  overlay.draw = function() {};
+  overlay.setMap(map);
 }
 
 var beaches = [
@@ -35,9 +42,9 @@ function setMarkers(map) {
     // This marker is 20 pixels wide by 32 pixels high.
     size: new google.maps.Size(32, 68),
     // The origin for this image is (0, 0).
-    origin: new google.maps.Point(0, 0),
+    origin: new google.maps.Point(0, 0)
     // The anchor for this image is the base of the flagpole at (0, 32).
-    anchor: new google.maps.Point(0, 32)
+    // anchor: new google.maps.Point(0, 32)
   };
   // Shapes define the clickable region of the icon. The type defines an HTML
   // <area> element 'poly' which traces out a polygon as a series of X,Y points.
@@ -59,94 +66,98 @@ function setMarkers(map) {
     });
     // now attach the event
     google.maps.event.addListener(marker, "dragend", function() {
-      console.log(marker.getPosition().lat());
-      console.log(marker.getPosition().lng());
+      // console.log(marker.getPosition().lat());
+      // console.log(marker.getPosition().lng());
+      updateStats();
+      getCounty(marker.getPosition().lat(), marker.getPosition().lng());
     });
   }
 }
 
+function markerDragged(marker) {
+  // console.log(marker.getPosition().lat());
+  // console.log(marker.getPosition().lng());
+  updateStats();
+  getCounty(marker.getPosition().lat(), marker.getPosition().lng());
+}
+
 function placeMarker(location) {
+  var image = {
+    url: "assets/pngfuel.com-1.png",
+    // This marker is 20 pixels wide by 32 pixels high.
+    size: new google.maps.Size(32, 68),
+    // The origin for this image is (0, 0).
+    origin: new google.maps.Point(0, 0)
+    // The anchor for this image is the base of the flagpole at (0, 32).
+    // anchor: new google.maps.Point(0, 32)
+  };
   var marker = new google.maps.Marker({
     position: location,
-    map: $map,
-    icon: "spring-hot.png"
+    map: map,
+    icon: image,
+    draggable: true
   });
+  // now attach the event
+  google.maps.event.addListener(marker, "dragend", function() {
+    // console.log(marker.getPosition().lat());
+    // console.log(marker.getPosition().lng());
+    updateStats();
+    getCounty(marker.getPosition().lat(), marker.getPosition().lng());
+  });
+  var tempPower = parseInt($(".varPower").html());
+  $(".varPower").html(tempPower + 15);
 }
 
 $(document).ready(function() {
-  //   $(".marker_drgable").draggable({
-  //     helper: "clone",
-  //     stop: function(e) {
-  //       var point = new google.maps.Point(e.pageX, e.pageY);
-  //       var ll = overlay.getProjection().fromContainerPixelToLatLng(point);
-  //       placeMarker(ll);
-  //     }
-  //   });
+  $(".marker_dragable").draggable({
+    helper: "clone",
+    stop: function(e) {
+      var point = new google.maps.Point(e.pageX - xoff, e.pageY - yoff);
+      var ll = overlay.getProjection().fromContainerPixelToLatLng(point);
+      placeMarker(ll);
+      // console.log($(this));
+      $(this).remove();
+      updateStats();
+    }
+  });
+
+  var xoff = getOffset(document.getElementById("map")).left;
+  var yoff = getOffset(document.getElementById("map")).top;
 });
+
+function updateStats() {
+  var power = Math.floor(Math.random() * 10);
+  var tempPower = parseInt($(".varPower").html());
+  power >= 6 ? (tempPower -= power) : (tempPower += power);
+
+  $(".varPower").html(tempPower);
+}
+
+function getOffset(el) {
+  var _x = 0;
+  var _y = 0;
+  while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+    _x += el.offsetLeft - el.scrollLeft;
+    _y += el.offsetTop - el.scrollTop;
+    el = el.offsetParent;
+  }
+  return { top: _y, left: _x };
+}
+
+function getCounty(lat, lng) {
+  $.ajax({
+    method: "GET",
+    url:
+      "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+      lat +
+      "," +
+      lng +
+      "&key=AIzaSyCSy8vzcH2uWCS09Dr5aGxK-lULAc-80ec"
+  }).done(function(data, status) {
+    console.log(data);
+  });
+}
 
 //reverse geocoding
 
 // https://0d6b3d9a.ngrok.io/api/v1/?format=json
-
-// on page load
-window.onload = function(){
-  console.log("window loaded")
-  base_url = "http://0d6b3d9a.ngrok.io/api/v1/"
-  let top_score = [0,0,0]
-
-  let coins = document.querySelector("#coins")
-  // let coins = document.querySelector("#power")
-  let power = document.querySelector("#power")
-  let rank = document.querySelector("#rank")
-  let leader_1 = document.querySelector("#leader-1")
-  let leader_2 = document.querySelector("#leader-2")
-  let leader_3 = document.querySelector("#leader-3")
-  console.log(power.textContent)
-
-
-  // let user_detail = document.cookie
-  // if (user_detail == ""){
-  //   new_user =
-  //   document.cookie = "windgameid=";
-  //   user_id = 1
-  //   user_url = "http://0d6b3d9a.ngrok.io/api/v1/users/?format=json"
-  //   score = fetch(user_url).
-  // }
-    // document.cookie = "windgameid=1";
-  user_id = 1
-  // user_url = base_url + "users/" + user_id + "/"
-  users_url = base_url + "users/"
-  // http://0d6b3d9a.ngrok.io/api/v1/users/1/
-  let users = get_users(users_url)
-
-  function populate(users = []) {
-    rank.value = "1" + "/" + users.length
-    for (let user in users){
-
-      if (user["id"] = user_id){
-        coins.textContent = user["coins"]
-      }
-      top_scores.forEach((score) => {
-        if (user["score"] > score){
-          console.log(score)
-        }
-      })
-    }
-    leader_1.textContent = 500
-    leader_2.textContent = 400
-    leader_3.textContent = 300
-  }
-  populate(users)
-
-}
-
-
-
-function get_users(users_url = ""){
-  fetch(users_url, {mode: 'no-cors'}).then(response => response.json())
-    .then(users => {
-      return JSON.parse(users)
-    }, error => {
-      console.log(error)
-    })
-}

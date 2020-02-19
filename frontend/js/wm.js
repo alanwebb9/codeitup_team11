@@ -1,4 +1,8 @@
 var map;
+var overlay;
+var xoff = 0;
+var yoff = 0;
+
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 53.454072, lng: -7.825874 },
@@ -12,6 +16,9 @@ function initMap() {
       map.panTo({ lat: 53.454072, lng: -7.825874 });
     }, 500);
   });
+  overlay = new google.maps.OverlayView();
+  overlay.draw = function() {};
+  overlay.setMap(map);
 }
 
 var beaches = [
@@ -35,9 +42,9 @@ function setMarkers(map) {
     // This marker is 20 pixels wide by 32 pixels high.
     size: new google.maps.Size(32, 68),
     // The origin for this image is (0, 0).
-    origin: new google.maps.Point(0, 0),
+    origin: new google.maps.Point(0, 0)
     // The anchor for this image is the base of the flagpole at (0, 32).
-    anchor: new google.maps.Point(0, 32)
+    // anchor: new google.maps.Point(0, 32)
   };
   // Shapes define the clickable region of the icon. The type defines an HTML
   // <area> element 'poly' which traces out a polygon as a series of X,Y points.
@@ -61,28 +68,70 @@ function setMarkers(map) {
     google.maps.event.addListener(marker, "dragend", function() {
       console.log(marker.getPosition().lat());
       console.log(marker.getPosition().lng());
+      updateStats();
     });
   }
 }
 
 function placeMarker(location) {
+  var image = {
+    url: "assets/pngfuel.com-1.png",
+    // This marker is 20 pixels wide by 32 pixels high.
+    size: new google.maps.Size(32, 68),
+    // The origin for this image is (0, 0).
+    origin: new google.maps.Point(0, 0)
+    // The anchor for this image is the base of the flagpole at (0, 32).
+    // anchor: new google.maps.Point(0, 32)
+  };
   var marker = new google.maps.Marker({
     position: location,
-    map: $map,
-    icon: "spring-hot.png"
+    map: map,
+    icon: image,
+    draggable: true
+  });
+  // now attach the event
+  google.maps.event.addListener(marker, "dragend", function() {
+    console.log(marker.getPosition().lat());
+    console.log(marker.getPosition().lng());
+    updateStats();
   });
 }
 
 $(document).ready(function() {
-  //   $(".marker_drgable").draggable({
-  //     helper: "clone",
-  //     stop: function(e) {
-  //       var point = new google.maps.Point(e.pageX, e.pageY);
-  //       var ll = overlay.getProjection().fromContainerPixelToLatLng(point);
-  //       placeMarker(ll);
-  //     }
-  //   });
+  $(".marker_dragable").draggable({
+    helper: "clone",
+    stop: function(e) {
+      var point = new google.maps.Point(e.pageX - xoff, e.pageY - yoff);
+      var ll = overlay.getProjection().fromContainerPixelToLatLng(point);
+      placeMarker(ll);
+      // console.log($(this));
+      $(this).remove();
+      updateStats();
+    }
+  });
+
+  var xoff = getOffset(document.getElementById("map")).left;
+  var yoff = getOffset(document.getElementById("map")).top;
 });
+
+function updateStats() {
+  var power = Math.floor(Math.random() * 10);
+  var tempPower = parseInt($(".varPower").html());
+  power >= 6 ? (tempPower -= power) : (tempPower += power);
+
+  $(".varPower").html(tempPower);
+}
+
+function getOffset(el) {
+  var _x = 0;
+  var _y = 0;
+  while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+    _x += el.offsetLeft - el.scrollLeft;
+    _y += el.offsetTop - el.scrollTop;
+    el = el.offsetParent;
+  }
+  return { top: _y, left: _x };
+}
 
 //reverse geocoding
 

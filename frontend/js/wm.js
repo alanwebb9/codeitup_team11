@@ -53,3 +53,26 @@ function setMarkers(map) {
 }
 
 //reverse geocoding
+
+// on page load
+window.onload = function(){
+  // let user_detail = document.cookie
+  // if (user_detail == ""){
+  //   new_user =
+  //   document.cookie = "windgameid=";
+  //   user_id = 1
+  //   user_url = "http://0d6b3d9a.ngrok.io/api/v1/users/?format=json"
+  //   score = fetch(user_url).
+  // }
+    // document.cookie = "windgameid=1";
+    user_id = 1
+    user_url = "http://0d6b3d9a.ngrok.io/api/v1/users/" + "{0}/?format=json"
+    score = fetch(user_url).then(response => response.text())
+      .then(user => {
+        console.log(user)
+        let score = document.querySelector("#score")
+        let power = document.querySelector("#power")
+
+      })
+
+}

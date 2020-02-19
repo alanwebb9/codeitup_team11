@@ -66,11 +66,19 @@ function setMarkers(map) {
     });
     // now attach the event
     google.maps.event.addListener(marker, "dragend", function() {
-      console.log(marker.getPosition().lat());
-      console.log(marker.getPosition().lng());
+      // console.log(marker.getPosition().lat());
+      // console.log(marker.getPosition().lng());
       updateStats();
+      getCounty(marker.getPosition().lat(), marker.getPosition().lng());
     });
   }
+}
+
+function markerDragged(marker) {
+  // console.log(marker.getPosition().lat());
+  // console.log(marker.getPosition().lng());
+  updateStats();
+  getCounty(marker.getPosition().lat(), marker.getPosition().lng());
 }
 
 function placeMarker(location) {
@@ -91,10 +99,13 @@ function placeMarker(location) {
   });
   // now attach the event
   google.maps.event.addListener(marker, "dragend", function() {
-    console.log(marker.getPosition().lat());
-    console.log(marker.getPosition().lng());
+    // console.log(marker.getPosition().lat());
+    // console.log(marker.getPosition().lng());
     updateStats();
+    getCounty(marker.getPosition().lat(), marker.getPosition().lng());
   });
+  var tempPower = parseInt($(".varPower").html());
+  $(".varPower").html(tempPower + 15);
 }
 
 $(document).ready(function() {
@@ -131,6 +142,20 @@ function getOffset(el) {
     el = el.offsetParent;
   }
   return { top: _y, left: _x };
+}
+
+function getCounty(lat, lng) {
+  $.ajax({
+    method: "GET",
+    url:
+      "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+      lat +
+      "," +
+      lng +
+      "&key=AIzaSyCSy8vzcH2uWCS09Dr5aGxK-lULAc-80ec"
+  }).done(function(data, status) {
+    console.log(data);
+  });
 }
 
 //reverse geocoding

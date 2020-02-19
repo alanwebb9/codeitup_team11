@@ -5,6 +5,13 @@ function initMap() {
     zoom: 7.1
   });
   setMarkers(map);
+
+  map.addListener("center_changed", function() {
+    // 3 seconds after the center of the map has changed, pan back to ireland as center
+    window.setTimeout(function() {
+      map.panTo({ lat: 53.454072, lng: -7.825874 });
+    }, 500);
+  });
 }
 
 var beaches = [
@@ -47,9 +54,36 @@ function setMarkers(map) {
       icon: image,
       shape: shape,
       title: beach[0],
-      zIndex: beach[3]
+      zIndex: beach[3],
+      draggable: true
+    });
+    // now attach the event
+    google.maps.event.addListener(marker, "dragend", function() {
+      console.log(marker.getPosition().lat());
+      console.log(marker.getPosition().lng());
     });
   }
 }
 
+function placeMarker(location) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: $map,
+    icon: "spring-hot.png"
+  });
+}
+
+$(document).ready(function() {
+  //   $(".marker_drgable").draggable({
+  //     helper: "clone",
+  //     stop: function(e) {
+  //       var point = new google.maps.Point(e.pageX, e.pageY);
+  //       var ll = overlay.getProjection().fromContainerPixelToLatLng(point);
+  //       placeMarker(ll);
+  //     }
+  //   });
+});
+
 //reverse geocoding
+
+// https://0d6b3d9a.ngrok.io/api/v1/?format=json

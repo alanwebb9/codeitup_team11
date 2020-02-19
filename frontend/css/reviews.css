@@ -1,0 +1,22 @@
+.image_plc {
+  width: 60px;
+  height: 60px;
+}
+.bg-5s {
+  background-color: #28a745;
+}
+.bg-4s {
+  background-color: #007bff;
+}
+.bg-3s {
+  background-color: #17a2b8;
+}
+.bg-2s {
+  background-color: #ffc107;
+}
+.bg-1s {
+  background-color: #dc3545;
+}
+a:hover {
+  cursor: pointer;
+}

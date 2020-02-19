@@ -1,0 +1,25 @@
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+#map {
+  height: 100%;
+}
+/* Optional: Makes the sample page fill the window. */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.main-area {
+  height: 80vh;
+}
+.image_plc {
+  width: 60px;
+  height: 60px;
+}
+.main-container {
+  min-width: 100%;
+}
+.usrscore {
+  color: #fdbf2d;
+}

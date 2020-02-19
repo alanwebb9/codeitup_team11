@@ -87,3 +87,66 @@ $(document).ready(function() {
 //reverse geocoding
 
 // https://0d6b3d9a.ngrok.io/api/v1/?format=json
+
+// on page load
+window.onload = function(){
+  console.log("window loaded")
+  base_url = "http://0d6b3d9a.ngrok.io/api/v1/"
+  let top_score = [0,0,0]
+
+  let coins = document.querySelector("#coins")
+  // let coins = document.querySelector("#power")
+  let power = document.querySelector("#power")
+  let rank = document.querySelector("#rank")
+  let leader_1 = document.querySelector("#leader-1")
+  let leader_2 = document.querySelector("#leader-2")
+  let leader_3 = document.querySelector("#leader-3")
+  console.log(power.textContent)
+
+
+  // let user_detail = document.cookie
+  // if (user_detail == ""){
+  //   new_user =
+  //   document.cookie = "windgameid=";
+  //   user_id = 1
+  //   user_url = "http://0d6b3d9a.ngrok.io/api/v1/users/?format=json"
+  //   score = fetch(user_url).
+  // }
+    // document.cookie = "windgameid=1";
+  user_id = 1
+  // user_url = base_url + "users/" + user_id + "/"
+  users_url = base_url + "users/"
+  // http://0d6b3d9a.ngrok.io/api/v1/users/1/
+  let users = get_users(users_url)
+
+  function populate(users = []) {
+    rank.value = "1" + "/" + users.length
+    for (let user in users){
+
+      if (user["id"] = user_id){
+        coins.textContent = user["coins"]
+      }
+      top_scores.forEach((score) => {
+        if (user["score"] > score){
+          console.log(score)
+        }
+      })
+    }
+    leader_1.textContent = 500
+    leader_2.textContent = 400
+    leader_3.textContent = 300
+  }
+  populate(users)
+
+}
+
+
+
+function get_users(users_url = ""){
+  fetch(users_url, {mode: 'no-cors'}).then(response => response.json())
+    .then(users => {
+      return JSON.parse(users)
+    }, error => {
+      console.log(error)
+    })
+}

@@ -40,7 +40,7 @@
             aria-selected="true"
           >
             <strong class="d-block text-gray-dark h3">Power</strong>
-            <span class="h4 px-2 topscore">75 KW</span>
+            <span id="power" class="h4 px-2 topscore">75 KW</span>
           </a>
         </div>
         <div class="col-2">
@@ -51,7 +51,7 @@
             aria-selected="true"
           >
             <strong class="d-block text-gray-dark h3">Coins</strong>
-            <span class="h4 px-2 topscore">550</span>
+            <span id="coins" class="h4 px-2 topscore">550</span>
           </a>
         </div>
         <div class="col-2">
@@ -62,7 +62,7 @@
             aria-selected="true"
           >
             <strong class="d-block text-gray-dark h3">Rank</strong>
-            <span class="h4 px-2 topscore">1/20</span>
+            <span id="rank" class="h4 px-2 topscore">1/20</span>
           </a>
         </div>
       </div>
@@ -120,7 +120,7 @@
         <div class="col-2">
           <div class="bg-white rounded box-shadow">
             <h6 class="border-bottom border-gray pb-2 mb-0">Leader board</h6>
-            <div class="media text-muted pt-3">
+            <div id="leader-1" class="media text-muted pt-3">
               <img
                 data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1"
                 alt="32x32"
@@ -136,7 +136,7 @@
                 <span class="h4 px-2 usrscore">550</span>
               </p>
             </div>
-            <div class="media text-muted pt-3">
+            <div id="leader-2" class="media text-muted pt-3">
               <img
                 data-src="holder.js/32x32?theme=thumb&amp;bg=e83e8c&amp;fg=e83e8c&amp;size=1"
                 alt="32x32"
@@ -152,7 +152,7 @@
                 <span class="h4 px-2 usrscore">400</span>
               </p>
             </div>
-            <div class="media text-muted pt-3">
+            <div id="leader-3" class="media text-muted pt-3">
               <img
                 data-src="holder.js/32x32?theme=thumb&amp;bg=6f42c1&amp;fg=6f42c1&amp;size=1"
                 alt="32x32"
@@ -181,6 +181,8 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/sweetalert2@9.js"></script>
+    <script src="js/postData.js"></script>
+    <script src="js/getCookie.js"></script>
     <script src="js/wm.js"></script>
   </body>
 </html>

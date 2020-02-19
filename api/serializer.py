@@ -3,16 +3,17 @@ from rest_framework import serializers
 from api.models import (User, WMData,
                     Windmills)
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("url", "id", "score", "coins")
-class WMDataSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = WMData
-        fields = ("url", "id", "user_id", "height", "starts", "lat", "long", "county")
+        fields = ("id", "score", "coins")
 
-class WindmillsSerializer(serializers.HyperlinkedModelSerializer):
+class WindmillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Windmills
-        fields = ("url", "id", "speed", "height", "year")
+        fields = ("id", "user_id", "height", "starts", "lat", "long", "county")
+
+class WMDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WMData
+        fields = ("id", "speed", "height", "year")
